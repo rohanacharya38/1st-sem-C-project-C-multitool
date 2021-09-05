@@ -2,3 +2,8 @@
   and run the batch files according to the system architecture.
 
 Note: for now only gcc compiler is supported.
+This project was jointly completed by:
+1. Rohan Maharzan (077BCT070)
+2. Shuvangi Adhikari(077BCT)
+3. Utsav Manandhar(077BCT093)
+4. Rohan Acharya(077BCT069)
