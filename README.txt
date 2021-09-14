@@ -4,6 +4,6 @@
 Note: for now only gcc compiler is supported.
 This project was jointly completed by:
 1. Rohan Maharzan (077BCT070)
-2. Shuvangi Adhikari(077BCT)
+2. Shuvangi Adhikari(077BCT080)
 3. Utsav Manandhar(077BCT093)
 4. Rohan Acharya(077BCT069)
