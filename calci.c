@@ -1,119 +1,15 @@
 #include <ctype.h>
-#define pi 3.141592654
-const int WIDTH = 1200;
-const int HEIGHT = 700; //Width and height of screen
-char inpbuffer[1000];   //GLobal variable for words inserted during program
-char input[1000];
-SDL_Window *window = NULL;     //window pointer declaring global so that we can use it in all functoins
-SDL_Renderer *renderer = NULL; //pointer to renderer
-SDL_Texture *imgTexture = NULL;
-SDL_Texture *imgTexture2 = NULL;
-TTF_Font *gFont = NULL;
-int mXpos, mYpos; //x and y position of mouse
-// SDL_Texture *imgTexture=NULL;
-bool flag = false;
-bool point = false;
-bool graphingMode = false;
 
-int behindPoint = 0;
-SDL_Rect image = {.x = 0, .y = 0, .w = WIDTH, .h = HEIGHT};
-struct charSize
-{
-    int height;
-    int width;
-} character[255];
-bool pause = false;
-//number operations
-double x[20];
-int operandCount = 0;
-int placeValue = 0;
-double inputNumber;
-char operator= '0';
-double opResult = 0;
-bool prevRes = false;
-bool mainmenu = false;
-int no = 0; //no of operator used
 //
-SDL_Texture *NewTexture[255];
-SDL_Color textColor = {0, 255, 0}; //SDL color variable
 
 //These are all the required functions for textIO process
-bool Initialize(void);   //It initializes all the required variables and memorry locations like windows and renderer
-void Update();           //maybe required later to udate the screen with dictionary info
-void Shutdown(void);     //it kills all memory and destroys for safe exit of program.Everything initialized in initialize functions is destroyed here
-void Display(char *inp); //Fuction that takes a string and displays it in screen
-void createCharacters(void);
-void result(float);
-long int fact(float n);
-float radian(float x);
-float degree(float x);
-float sine(float x);
-float cosine(float x);
-float tangent(float x);
-float sinhyp(float x);
-float coshyp(float x);
-float tanhyp(float x);
-void createGraph(void);
-bool Initialize(void)
+
+void DisplayCalc(char *inp)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) //Video initialization
-    {
-        fprintf(stderr, "Failed to initialize SDL:%s\n", SDL_GetError()); //if there is error in video initialization it prints failed to initialize to stderr
-        return false;
-    }
-    window = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN); //Creating a window with width height and title parameters note that position of window is not defined
-    if (!window)
-    {
-        return false;
-    }
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); //Initializing a renderer in the creating window which render objects there
-    if (!renderer)
-    {
-        return false;
-    }
-    if (TTF_Init() == -1)
-    {
-        return false;
-    }
-    createCharacters();
-
-    imgTexture = IMG_LoadTexture(renderer, "media\\calci.png");
-
-    // loadImage("searchLayout.png");
-    // loadDisplay("Display.png");
-    return true; //If it fails to initialize even 1 memory adresses it simply returns false
-}
-void Shutdown(void) //Safe exit functon
-{
-    for (int i = 0; i < 255; i++)
-    {
-        SDL_DestroyTexture(NewTexture[i]);
-    }
-
-    SDL_DestroyTexture(imgTexture);
-    if (renderer)
-    {
-
-        SDL_DestroyRenderer(renderer); //Destroys renderer
-    }
-    if (window)
-    {
-        SDL_DestroyWindow(window); //Destroys window
-    }
-    TTF_Quit(); //Exit TTF->True type font and SDL->Simple DirectMedia Layer
-    SDL_Quit();
-    if (mainmenu)
-    {
-        system("start mainmenu.exe");
-    }
-}
-
-void Display(char *inp)
-{
-
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, imgTexture, NULL, &image);
-    if (!imgTexture)
+        SDL_Rect image = {.x = 0, .y = 0, .w = WIDTH, .h = HEIGHT};
+        SDL_RenderCopy(renderer, calciTexture, NULL, &image);
+    if (!calciTexture)
     {
         printf("failed to load image");
     }
@@ -150,14 +46,9 @@ void Display(char *inp)
             behindPoint++;
         }
     }
-    // else
-    // {
-    //     point = false;
-    //     operandCount++;
-    //     behindPoint = 0;
-    // }
     strcat(inpbuffer, inp);
-    inp = strcat(inpbuffer, "");
+    inp=malloc(sizeof(inpbuffer));
+    strcpy(inp,inpbuffer);
     SDL_Rect dest;
     int i = 0;
     dest.x = 0;
@@ -173,27 +64,13 @@ void Display(char *inp)
     }
     SDL_RenderPresent(renderer);
     prevRes = false;
-}
-void createCharacters(void)
-{
-    gFont = TTF_OpenFont("media\\Lobster-Regular.ttf", 30); //SDL font pointer
-    SDL_Surface *CharacterMap[255];
-    for (int i = 0; i < 255; i++)
-    {
-        char str[2] = {(char)i, '\0'};
-        CharacterMap[i] = TTF_RenderText_Blended_Wrapped(gFont, str, textColor, WIDTH - 50);
-        NewTexture[i] = SDL_CreateTextureFromSurface(renderer, CharacterMap[i]);
-        character[i].height = CharacterMap[i] ? CharacterMap[i]->h : 0;
-        character[i].width = CharacterMap[i] ? CharacterMap[i]->w : 0;
-        SDL_FreeSurface(CharacterMap[i]);
-    }
-    TTF_CloseFont(gFont);
+    printf("end");
 }
 void result(float result)
 {
     sprintf(input, "=%f", result);
-    char *inp = input;
-
+    char *inp=malloc(sizeof(input));
+    strcpy(inp,input);
     SDL_Rect dest;
     int i = 0;
     dest.x = 0;
