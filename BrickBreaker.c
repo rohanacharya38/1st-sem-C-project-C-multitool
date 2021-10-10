@@ -1,140 +1,90 @@
+#include "displayB.c"// const int WIDTH = 600;const int WIDTH = 1200;
+// const int HEIGHT = 700; //Width and height of screen
+// const int HEIGHT = 400;
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <time.h>
 #include <math.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
-#include "displayB.c"
-int main(int argc, char *argv[])
+int stoi(char str[])
 {
-    srand((unsigned int)time(NULL));
-    atexit(Shutdown);
-    if (!Initialize())
+    return (int)str[0];
+}
+int BrickBreak(SDL_Event *event)
+{
+    const Uint8 *kState = SDL_GetKeyboardState(NULL);
+    if (kState[SDL_SCANCODE_F] && !menumode && !scoreMode && !appendName)
     {
-        exit(1);
+        UpdateScore(2, 0);
     }
-    bool quit = false;
-    int mXpos, mYpos;
-    SDL_Event event;
-    Uint32 lastTick = SDL_GetTicks();
-    loadAudio();
-    while (!quit)
+    if (kState[SDL_SCANCODE_ESCAPE] && !scoreMode && !appendName)
     {
-        const Uint8 *kState = SDL_GetKeyboardState(NULL);
-        if (kState[SDL_SCANCODE_F] && !menumode && !scoreMode && !appendName)
+        menu = true;
+    }
+    {
+        if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_RETURN)
         {
-            UpdateScore(2, 0);
-        }
-        if (kState[SDL_SCANCODE_ESCAPE] &&!scoreMode && !appendName)
-        {
-            mainmenu = true;
-            quit = true;
-        }
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_QUIT)
+            if (appendName)
             {
-                quit = true;
+                appendName = false;
+                menumode = true;
+                rohan.score = player2.score;
+                player2.score = 0;
+                moveCursorPosition = 0;
+                writeScore();
+                RestartGame();
             }
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN)
+            else if (scoreMode)
             {
-                if (appendName)
-                {
-                    appendName = false;
-                    menumode = true;
-                    rohan.score = player2.score;
-                    player2.score = 0;
-                    moveCursorPosition = 0;
-                    writeScore();
-                    RestartGame();
-                }
-                else if (scoreMode)
-                {
-                    scoreMode = false;
-                }
-                else if (menumode)
-                {
-                    menumode = false;
-                }
-            }
-            if (event.type == SDL_TEXTINPUT && appendName)
-            {
-                Display(event.text.text, moveCursorPosition, 60);
-                strcat(rohan.name, event.text.text);
-                moveCursorPosition += 20;
-                SDL_RenderPresent(renderer);
+                scoreMode = false;
             }
             else if (menumode)
             {
-                if (event.type == SDL_MOUSEBUTTONDOWN && menumode)
+                menumode = false;
+            }
+        }
+         if (event->type == SDL_TEXTINPUT && appendName && textinput)
+        {
+            
+            char str[]= {event->text.text[0],'\0'};
+            DisplayB(str, moveCursorPosition, 60);
+            strcat(rohan.name, str);
+            moveCursorPosition+=character[stoi(str)].width;
+            SDL_RenderPresent(renderer);
+        }
+        else if (menumode)
+        {
+            if (event->type == SDL_MOUSEBUTTONDOWN && menumode)
+            {
+                SDL_GetMouseState(&mXpos, &mYpos);
+                if (mXpos > 505 && mXpos < 610 && mYpos > 307 && mYpos < 321) //coordinates of new game
                 {
-                    SDL_GetMouseState(&mXpos, &mYpos);
-                    if (mXpos > 203 && mXpos < 341 && mYpos > 165 && mYpos < 180) //coordinates of new game
-                    {
-                        menumode = false;
-                    }
-                    else if (mXpos > 203 && mXpos < 364 && mYpos > 210 && mYpos < 230) //coordinates of high scores
-                    {
-                        highScoreDisplay();
-                    }
-
+                    menumode = false;
+                }
+                else if (mXpos >506  && mXpos < 633 && mYpos > 356 && mYpos < 370) //coordinates of high scores
+                {
+                    highScoreDisplay();
                 }
             }
         }
-        Uint32 curTick = SDL_GetTicks();
-        Uint32 diff = curTick - lastTick;
-        float elapsed = diff / 1000.0f;
-        if (!menumode && !scoreMode && !appendName)
-        {
-            Update(elapsed);
-        }
-        lastTick = curTick;
     }
-    SDL_Quit();
+    if (!menumode && !scoreMode && !appendName)
+    {
+        updateB(0.025);
+    }
     return 0;
 }
-bool Initialize(void)
+
+void updateB(float elapsed)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-    {
-        printf("Failed to initialize SDL:%s\n", SDL_GetError());
-        return false;
-    }
-
-    window = SDL_CreateWindow("Rohan", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
-    SDL_SetWindowTitle(window, "Brick-Breaker");
-
-    if (!window)
-    {
-        return false;
-    }
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer)
-    {
-        return false;
-    }
-    if (TTF_Init() == -1)
-    {
-        return false;
-    }
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-    {
-        printf("Error opening SDL_MIXER Error:%s\n", Mix_GetError());
-    }
-    createCharacters();
-    ball = MakeBall(BALL_SIZE);
-    player1 = MakePlayers();
-    player2 = MakePlayers();
-    // MakeBricks();
-    return true;
-}
-void Update(float elapsed)
-{
-
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
+    SDL_SetRenderDrawColor(renderer,255,255,255,255);
+    SDL_RenderDrawLine(renderer,300,150,300,550);
+    SDL_RenderDrawLine(renderer,900,150,900,550);
+    SDL_RenderDrawLine(renderer,300,150,900,150);
+    SDL_RenderDrawLine(renderer,300,550,900,550);
     UpdateBall(&ball, elapsed);
     if (!menumode && !appendName)
     {
@@ -148,26 +98,7 @@ void Update(float elapsed)
         SDL_RenderPresent(renderer);
     }
 }
-void Shutdown(void)
-{
-    if (renderer)
-    {
 
-        SDL_DestroyRenderer(renderer);
-    }
-    if (window)
-    {
-        SDL_DestroyWindow(window);
-    }
-
-    Mix_Quit();
-    TTF_Quit();
-    SDL_Quit();
-    if (mainmenu)
-    {
-        system("start mainmenu.exe");
-    }
-}
 bool CoinFlip(void)
 {
     return rand() % 2 == 1 ? true : false;
@@ -175,8 +106,8 @@ bool CoinFlip(void)
 Ball MakeBall(int size)
 {
     Ball ball = {
-        .x = WIDTH / 2,
-        .y = HEIGHT - PLAYER_WIDTH,
+        .x = 600,
+        .y = 550 - PLAYER_WIDTH,
         .size = size,
         .xSpeed = SPEED * (CoinFlip() ? 1 : -1),
         .ySpeed = SPEED * (CoinFlip() ? 1 : -1),
@@ -203,31 +134,32 @@ void UpdateBall(Ball *ball, float elapsed)
 {
     if (!served)
     {
-        ball->x = WIDTH / 2;
-        ball->y = HEIGHT - PLAYER_WIDTH - PLAYER_MARGIN;
+        ball->x = 600;
+        ball->y = 550 - PLAYER_WIDTH - PLAYER_MARGIN;
         player2.xPosition = WIDTH / 2 - PLAYER_HEIGHT / 4 - PLAYER_MARGIN;
         const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
         ball->xSpeed = SPEED;
         ball->ySpeed = SPEED;
         return;
     }
-    ball->x += ball->xSpeed * elapsed;
-    ball->y += ball->ySpeed * elapsed;
-    if (ball->x < BALL_SIZE / 2)
+    ball->x += ball->xSpeed *elapsed;
+    ball->y += ball->ySpeed *elapsed;
+    if (ball->x < 300+BALL_SIZE)
     {
         ball->xSpeed = +fabs(ball->xSpeed);
     }
-    if (ball->x > WIDTH - BALL_SIZE)
+    if (ball->x > 900-BALL_SIZE/2)
     {
         ball->xSpeed = -fabs(ball->xSpeed);
     }
-    if (ball->y < BALL_SIZE / 2)
+    if (ball->y < 150+BALL_SIZE)
     {
         ball->ySpeed = fabs(ball->ySpeed);
     }
-    if (ball->y > HEIGHT - BALL_SIZE)
+    if (ball->y > 560-BALL_SIZE/2)
     {
         RestartGame();
+        // ball->ySpeed=-fabs(ball->ySpeed);
     }
 }
 Player MakePlayers(void)
@@ -252,13 +184,13 @@ void UpdatePlayers(float elapsed)
     {
         player2.xPosition += PLAYER_MOVE_SPEED * elapsed;
     }
-    if (player2.xPosition < PLAYER_WIDTH / 2)
+    if (player2.xPosition < PLAYER_WIDTH / 2+300)
     {
-        player2.xPosition = PLAYER_WIDTH / 2;
+        player2.xPosition = PLAYER_WIDTH / 2+300;
     }
-    if (player2.xPosition > WIDTH - 80)
+    if (player2.xPosition > 900 - 80)
     {
-        player2.xPosition = WIDTH - 80;
+        player2.xPosition = 900- 80;
     }
     //check if  ball rect overlaps with either player rect
     SDL_Rect ballRect = {
@@ -269,7 +201,7 @@ void UpdatePlayers(float elapsed)
     };
     SDL_Rect player2Rect = {
         .x = (int)(player2.xPosition) - PLAYER_WIDTH / 2,
-        .y = HEIGHT - PLAYER_WIDTH,
+        .y = 550 - PLAYER_WIDTH,
         .w = PLAYER_HEIGHT,
         .h = PLAYER_WIDTH,
     };
@@ -283,7 +215,7 @@ void RenderPlayers(void)
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_Rect player2Rect = {
         .x = (int)(player2.xPosition) - PLAYER_WIDTH / 2,
-        .y = HEIGHT - PLAYER_WIDTH,
+        .y = 550 - PLAYER_WIDTH,
         .w = PLAYER_HEIGHT,
         .h = PLAYER_WIDTH,
     };
@@ -307,10 +239,10 @@ void UpdateScore(int player, int points)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_SetWindowTitle(window, buf);
-    Display("Congratulations!You Leveled Up", (WIDTH / 2) - 200, HEIGHT / 2 - 30);
+    DisplayB("Congratulations!You Leveled Up", (WIDTH / 2) - 200, HEIGHT / 2 - 30);
     char lvlupshow[50];
     sprintf(lvlupshow, "Score=%d", player2.score);
-    Display(lvlupshow, WIDTH / 2 - 100, HEIGHT / 2);
+    DisplayB(lvlupshow, WIDTH / 2 - 100, HEIGHT / 2);
     SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 }
@@ -333,30 +265,30 @@ void UpdateBricks(void)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 50 + 100 * i;
-        bricks[i].y = 50;
+        bricks[i].x = 300+ 50 + 100 * i;
+        bricks[i].y = 50+150;
     }
     for (int i = 5; i < 10; i++)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 50 + 100 * (i - 5);
-        bricks[i].y = 100;
+        bricks[i].x = 300+50 + 100 * (i - 5);
+        bricks[i].y = 150+100;
     }
     for (int i = 10; i < 15; i++)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 50 + 100 * (i - 10);
-        bricks[i].y = 150;
+        bricks[i].x = 300+50 + 100 * (i - 10);
+        bricks[i].y = 150+150;
     }
 
     for (int j = 15; j < 20; j++)
     {
         bricks[j].h = BRICK_HEIGHT;
         bricks[j].w = BRICK_WIDTH;
-        bricks[j].x = 50 + 100 * (j - 15);
-        bricks[j].y = 200;
+        bricks[j].x = 300+50 + 100 * (j - 15);
+        bricks[j].y = 150+200;
     }
 
     for (int i = 0; i < 20; i++)
@@ -373,7 +305,6 @@ void UpdateBricks(void)
         {
             if (SDL_HasIntersection(&ballRect, &bricks[i]))
             {
-                Mix_PlayChannel(-1, collision, 0);
                 player2.score += 50;
                 player1.score += 50;
                 count[i]--;
@@ -427,10 +358,10 @@ void RestartGame(void)
     {
 
         sprintf(scoreBuf, "Score:%d", player1.score);
-        Display(scoreBuf, WIDTH / 2 - 100, 50);
-        Display("GAME OVER!", WIDTH / 2 - 100, 0);
-        Display("New Game", WIDTH / 2 - 100, (HEIGHT / 2) - 50);
-        Display("High Scores", WIDTH / 2 - 100, (HEIGHT / 2));
+        DisplayB(scoreBuf, 600 / 2 - 100, 50);
+        DisplayB("GAME OVER!", 600 / 2 - 100, 0);
+        DisplayB("New Game", 600 / 2 - 100, (400 / 2) - 50);
+        DisplayB("High Scores", 600 / 2 - 100, (400 / 2));
         served = false;
         player2.score = 0;
         player1.score = 0;
@@ -446,26 +377,8 @@ void RestartGame(void)
     }
     else if (appendName)
     {
-        Display("New high score!congratulations", 0, 0);
-        Display("Please Enter your name for records", 0, 30);
+        DisplayB("New high score!congratulations", 0, 0);
+        DisplayB("Please Enter your name for records", 0, 30);
     }
     SDL_RenderPresent(renderer);
-}
-
-void loadAudio(void)
-{
-    collision = Mix_LoadWAV("media\\1.wav");
-    if (collision == NULL)
-    {
-        printf("failed to open collisioin file\n");
-    }
-    else
-    {
-        printf("Succesfully Opened collision\n");
-    }
-    bgMusic = Mix_LoadMUS(".wav");
-    if (collision == NULL)
-    {
-        printf("failed to open bgMusic file\n");
-    }
 }

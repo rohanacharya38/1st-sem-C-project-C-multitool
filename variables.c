@@ -18,7 +18,7 @@ SDL_Texture *displayTexture = NULL,*menuTexture=NULL;
 TTF_Font *gFont = NULL;
 int mXpos, mYpos; //x and y position of mouse
 bool appendMode = false,resultMode = false,meaningMode = false,flag = false,pause=false,point=false,graphingMode=false;
-bool menu = true,calci=false,brick=false,dict=false;
+bool menu = true,calci=false,brickG=false,dict=false;
 struct charSize
 {
     int height;
@@ -82,3 +82,72 @@ float sinhyp(float x);
 float coshyp(float x);
 float tanhyp(float x);
 void createGraph(void);
+const int BALL_SIZE = 10;
+int roundno = 1;
+int moveCursorPosition;
+bool scoreMode = false;
+bool appendName = false;
+bool shouldCheck = true;
+bool textinput=false;
+int curScore = 0;
+unsigned int count[20] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+typedef struct player_data
+{
+    char name[40];
+    int score;
+} data;
+data rohan;
+data highestScore[5];
+typedef struct Ball
+{
+    float x;
+    float y;
+    float xSpeed;
+    float ySpeed;
+    int size;
+} Ball;
+typedef struct Player
+{
+    int score;
+    float xPosition;
+
+} Player;
+typedef struct Bricks
+{
+    float xPositon;
+    float yPosition;
+    int size;
+} Bricks;
+Bricks brick[20];
+Ball ball;
+Player player1;
+Player player2;
+const int PLAYER_WIDTH = 15;
+const int PLAYER_HEIGHT = 85;
+const int PLAYER_MARGIN = 5;
+const int BRICK_WIDTH = 60;
+const int BRICK_HEIGHT = 10;
+float SPEED = 130;
+float PLAYER_MOVE_SPEED = 150.0f;
+bool served;
+bool menumode = false;
+Uint32 lastTick;
+void call(void);
+void updateB(float);
+Ball MakeBall(int size);
+void UpdateBall(Ball *ball, float elapsed);
+void RenderBall(const Ball *);
+Player MakePlayers(void);
+void UpdatePlayers(float elapsed);
+void RenderPlayers(void);
+void UpdateScore(int player, int points);
+// void MakeBricks(void);
+void UpdateBricks(void);
+void RestartGame(void);
+void loadAudio(void);
+void sortArray(data *element);
+void writeScore(void);
+void getScore_withname(void);
+ void writeScore_withname(int points);
+bool updateScoreMode = false;
+// void RenderBricks(void);
