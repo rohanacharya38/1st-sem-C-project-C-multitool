@@ -71,7 +71,7 @@ int calculator(SDL_Event *event)
             operatorFunc();
             placeValue = 0;
             operandCount++;
-            DisplayCalc("\%");
+            DisplayCalc("%%");
             operator= '%';
             break;
         }

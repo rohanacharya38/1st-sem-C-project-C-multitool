@@ -44,7 +44,7 @@ int BrickBreak(SDL_Event *event)
                 menumode = false;
             }
         }
-         if (event->type == SDL_TEXTINPUT && appendName && textinput)
+         if (event->type == SDL_TEXTINPUT && appendName)
         {
             
             char str[]= {event->text.text[0],'\0'};
@@ -232,13 +232,8 @@ void UpdateScore(int player, int points)
     }
     PLAYER_MOVE_SPEED *= 1.3;
     SPEED *= 1.2;
-    char *pointsTable = "Level %d";
-    int len = snprintf(NULL, 0, pointsTable, roundno);
-    char buf[len + 1];
-    snprintf(buf, len + 1, pointsTable, roundno);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_SetWindowTitle(window, buf);
     DisplayB("Congratulations!You Leveled Up", (WIDTH / 2) - 200, HEIGHT / 2 - 30);
     char lvlupshow[50];
     sprintf(lvlupshow, "Score=%d", player2.score);

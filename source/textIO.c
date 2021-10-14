@@ -16,8 +16,7 @@ int dictionary(SDL_Event *event)
         switch (event->type) //event.type is any type of event occurance when program is running
         {
         case SDL_TEXTINPUT: //if users inputs text
-           if(textinput)
-           {
+           
             if (appendMode)
             {
                 strcat(appendWord, event->text.text);
@@ -35,7 +34,7 @@ int dictionary(SDL_Event *event)
                 inpbuffer[strlen(inpbuffer) - 1] = '\0';
                 break;
             }
-           }
+           
         case SDL_KEYDOWN:                                //if any key is pressed
             if (event->key.keysym.sym == SDLK_BACKSPACE) //if key pressed  is backspace
             {
@@ -218,7 +217,7 @@ void file_read(char word[500])
     }
     strcat(word, ":");
     bool found = false;
-    fp = fopen("media\\test.txt", "r");
+    fp = fopen("..\\..\\media\\test.txt", "r");
     if (fp == NULL)
     {
         printf("error to open file");
@@ -255,7 +254,7 @@ void appendWords(void)
     {
         appendWord[0] = appendWord[0] - 32;
     }
-    fptr = fopen("media\\test.txt", "a");
+    fptr = fopen("..\\..\\media\\test.txt", "a");
     strcat(appendWord, "\n");
     fputs(appendWord, fptr);
     fclose(fptr);

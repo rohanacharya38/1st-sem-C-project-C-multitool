@@ -18,11 +18,9 @@ int main(int argc, char *argv[])
     }
     bool quit = false; //declaring quit to be false so that if we need to quit we can declare it true
     SDL_Event event;   //an event which represents our entire program
-    lastTick = SDL_GetTicks();
     while (!quit) //Since quit is false program executes till quit is true->This is the main loop to run program
     {
         SDL_StartTextInput();
-        textinput=false;         //this enables us to track text entered during runtime
         while (SDL_PollEvent(&event)) //this catptures every event hapening during runtime
         {
             if (menu)
@@ -65,13 +63,10 @@ int main(int argc, char *argv[])
                     }
                 }
                 break;
-            case SDL_TEXTINPUT:
-                    textinput=true;
-                break;
-                break;
+                default:
+                    break;
             }
-        }
-        if (!menu)
+            if (!menu)
         {
             if (dict)
             {
@@ -88,6 +83,8 @@ int main(int argc, char *argv[])
                 BrickBreak(&event);
             }
         }
+        }
+        
         SDL_StopTextInput();
     }
 
@@ -115,10 +112,10 @@ bool Initialize(void)
     {
         return false;
     }
-    menuTexture = IMG_LoadTexture(renderer, "media/mainmenu.png");
-    searchTexture = IMG_LoadTexture(renderer, "media/searchLayout.png");
-    displayTexture = IMG_LoadTexture(renderer, "media/Display.png");
-    calciTexture = IMG_LoadTexture(renderer, "media/calci.png");
+    menuTexture = IMG_LoadTexture(renderer, "../../media/mainmenu.png");
+    searchTexture = IMG_LoadTexture(renderer, "../../media/searchLayout.png");
+    displayTexture = IMG_LoadTexture(renderer, "../../media/Display.png");
+    calciTexture = IMG_LoadTexture(renderer, "../../media/calci.png");
     createCharacters();
     return true; //If it fails to initialize even 1 memory adresses it simply returns false
 }

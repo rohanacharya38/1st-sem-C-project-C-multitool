@@ -5,17 +5,16 @@
 #include <string.h>         //string operations
 #include <SDL2/SDL_ttf.h>   //main library for rendering fonts
 #include <SDL2/SDL_image.h> //image library
-char inpbuffer[1000];       //GLobal variable for words inserted during program
-char contents[1000];
-char appendWord[1000];
+#define WIDTH  1200
+#define HEIGHT  700//Width and height of screen
+char inpbuffer[255];       //GLobal variable for words inserted during program
+char contents[255];
+char appendWord[255];
 SDL_Window *window = NULL;         //window pointer declaring global so that we can use it in all functoins
 SDL_Renderer *renderer = NULL;     //pointer to renderer
 SDL_Color textColor = {255, 0, 0}; //SDL color variable
 SDL_Texture *searchTexture = NULL;
-const int WIDTH = 1200;
-const int HEIGHT = 700; //Width and height of screen
 SDL_Texture *displayTexture = NULL,*menuTexture=NULL;
-TTF_Font *gFont = NULL;
 int mXpos, mYpos; //x and y position of mouse
 bool appendMode = false,resultMode = false,meaningMode = false,flag = false,pause=false,point=false,graphingMode=false;
 bool menu = true,calci=false,brickG=false,dict=false;
@@ -55,9 +54,8 @@ void file_read(char *word);
 void appendWords(void);
 bool Initialize(void); //It initializes all the required variables and memorry locations like windows and renderer
 
-void createCharacters(void)
-{
-    gFont = TTF_OpenFont("media\\Lobster-Regular.ttf", 24); //SDL font pointer
+void createCharacters(void){
+    TTF_Font *gFont = TTF_OpenFont("../../media/Lobster-Regular.ttf", 24); //SDL font pointer
     SDL_Surface *CharacterMap[255];
     for (int i = 0; i < 255; i++)
     {
