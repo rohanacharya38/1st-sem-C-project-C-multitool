@@ -23,17 +23,17 @@ echo ----------------------------------------
 echo Downloading SDL
 echo ----------------------------------------
 curl "https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip" --output SDL2.zip
-unzip  SDL2.zip -d SDL2
+tar -xf SDL2.zip -C SDL2
 del SDL2.zip
 echo ----------------------------------------
 echo Downloading SDL_ttf
 echo ----------------------------------------
 curl "https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip" --output SDL2_ttf.zip
-unzip  SDL2_ttf.zip -d SDL2
+tar -xf  SDL2_ttf.zip -C SDL2
 del SDL2_ttf.zip
 xcopy /Y SDL2\SDL2_ttf-2.0.15\include\SDL_ttf.h SDL2\SDL2-2.0.14\include\
 curl "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip" --output SDL2_image.zip
-unzip SDL2_image.zip -d SDL2
+tar -xf SDL2_image.zip -C SDL2
 del SDL2_image.zip
 xcopy /Y SDL2\SDL2_ttf-2.0.15\include\SDL_ttf.h SDL2\SDL2-2.0.14\include\
 xcopy /Y SDL2\SDL2_image-2.0.5\include\SDL_image.h SDL2\SDL2-2.0.14\include\
