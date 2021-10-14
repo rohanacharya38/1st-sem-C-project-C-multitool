@@ -8,11 +8,6 @@
 
 int dictionary(SDL_Event *event)
 {
-        if (!appendMode && !meaningMode && !resultMode)
-        {
-            Display("|", true);
-            inpbuffer[strlen(inpbuffer) - 1] = '\0';
-        }
         switch (event->type) //event.type is any type of event occurance when program is running
         {
         case SDL_TEXTINPUT: //if users inputs text
@@ -30,8 +25,6 @@ int dictionary(SDL_Event *event)
             else
             {
                 Display(event->text.text, true); //event.text.text is the buffer where entered text goes so displaying it as it is
-                Display("|", true);
-                inpbuffer[strlen(inpbuffer) - 1] = '\0';
                 break;
             }
            
@@ -41,21 +34,16 @@ int dictionary(SDL_Event *event)
                 if (strlen(inpbuffer) > 0 && !appendMode && !meaningMode) //if there is text in buffer ie length of text is greater than zero
                 {
                     inpbuffer[strlen(inpbuffer) - 1] = '\0'; //setting the second last as \0 because it needs to be erased
-                    Display("|", true);                      //add a cursor | to the input buffer
-                    inpbuffer[strlen(inpbuffer) - 1] = '\0'; //remove the cursor after displaying it
+  
                 }
                 if (flag)
                 {
                     strcpy(inpbuffer, "");
-                    Display("|", true);
-                    inpbuffer[strlen(inpbuffer) - 1] = '\0';
                     flag = false;
                 }
                 if (strlen(appendWord) > 0 && (appendMode || meaningMode)) //if there is text in buffer ie length of text is greater than zero
                 {
                     appendWord[strlen(appendWord) - 1] = '\0'; //setting the second last as \0 because it needs to be erased
-                    inpbuffer[strlen(inpbuffer) - 1] = '\0';   //remove the cursor after displaying it
-                    Display("", false);                        //add a cursor | to the input buffer
                 }
             }
             else if (event->key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL) //condition-if user presses ctrl + c
@@ -66,8 +54,6 @@ int dictionary(SDL_Event *event)
             {
                 // Display(SDL_GetClipboardText(),false);
                 strcat(inpbuffer, SDL_GetClipboardText()); //get text from input and appends it to inputbuffer
-                Display("|", true);
-                inpbuffer[strlen(inpbuffer) - 1] = '\0';
             }
             else if (event->key.keysym.sym == SDLK_RETURN)
             {

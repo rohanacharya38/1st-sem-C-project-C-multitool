@@ -44,7 +44,7 @@ int BrickBreak(SDL_Event *event)
                 menumode = false;
             }
         }
-         if (event->type == SDL_TEXTINPUT && appendName)
+         if (event->type == SDL_TEXTINPUT && appendName &&textinput)
         {
             
             char str[]= {event->text.text[0],'\0'};
@@ -339,7 +339,6 @@ void UpdateBricks(void)
 void RestartGame(void)
 {
     menumode = true;
-    SDL_SetWindowTitle(window, "Brick-Breaker");
     if (shouldCheck)
     {
         writeScore_withname(player2.score);

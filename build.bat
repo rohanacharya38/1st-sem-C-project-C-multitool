@@ -23,7 +23,7 @@ echo ----------------------------------------
 echo Downloading SDL
 echo ----------------------------------------
 curl "https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip" --output SDL2.zip
-unzip SDL2.zip -d SDL2
+unzip  SDL2.zip -d SDL2
 del SDL2.zip
 echo ----------------------------------------
 echo Downloading SDL_ttf
@@ -31,7 +31,7 @@ echo ----------------------------------------
 curl "https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip" --output SDL2_ttf.zip
 unzip  SDL2_ttf.zip -d SDL2
 del SDL2_ttf.zip
-xcopy /Y SDL2\SDL2_ttf-2.0.15\include\SDL_ttf.h SDL2\SDL2-2.0.14\include
+xcopy /Y SDL2\SDL2_ttf-2.0.15\include\SDL_ttf.h SDL2\SDL2-2.0.14\include\
 curl "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip" --output SDL2_image.zip
 unzip SDL2_image.zip -d SDL2
 del SDL2_image.zip
@@ -68,7 +68,7 @@ del SDL2MingW_image.tar.gz
 :SkipDownloadSDLMinGw
 if  "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
      echo set the include path 64 bit
-set SDL2_Include="../../SDL2/SDL2-2.0.14/include"
+set SDL2_Include="../../SDL2/SDL2-2.0.14/include/"
 set SDL2_Library="../../SDL2/SDL2-2.0.14/lib/x64"
 set SDL2_DLL=..\..\SDL2\SDL2-2.0.14\lib\x64\SDL2.dll
 set SDL2_ttf_Library="../../SDL2/SDL2_ttf-2.0.15/lib/x64"
@@ -77,8 +77,8 @@ set SDL2_image_Library="../../SDL2/SDL2_image-2.0.5/lib/x64"
 set SDL2_image_DLL="../../SDL2/SDL2_image-2.0.5/lib/x64/*.dll"
 set SDL2_image_DLL=..\..\SDL2\SDL2_image-2.0.5\lib\x64\*.dll
 
-xcopy /Y SDL2MinGw\SDL2_ttf-2.0.15\x86_64-w64-mingw32\include\SDL2\SDL_ttf.h SDL2MinGw\SDL2-2.0.14\x86_64-w64-mingw32\include\SDL2
-xcopy /Y SDL2MinGw\SDL2_image-2.0.5\x86_64-w64-mingw32\include\SDL2\SDL_image.h SDL2MinGw\SDL2-2.0.14\x86_64-w64-mingw32\include\SDL2
+@REM xcopy /Y SDL2MinGw\SDL2_ttf-2.0.15\x86_64-w64-mingw32\include\SDL2\SDL_ttf.h SDL2MinGw\SDL2-2.0.14\x86_64-w64-mingw32\include\SDL2
+@REM xcopy /Y SDL2MinGw\SDL2_image-2.0.5\x86_64-w64-mingw32\include\SDL2\SDL_image.h SDL2MinGw\SDL2-2.0.14\x86_64-w64-mingw32\include\SDL2
 set SDL2MinGw_Include="../../SDL2MinGw/SDL2-2.0.14/x86_64-w64-mingw32/include/"
 set SDL2MinGw_Library="../../SDL2MinGw/SDL2-2.0.14/x86_64-w64-mingw32/lib/"
 set SDL2MinGw_DLL="../../SDL2MinGw\SDL2-2.0.14\x86_64-w64-mingw32\bin\SDL2.dll"
@@ -91,7 +91,7 @@ set SDL2MinGw_image_DLL="../../SDL2MinGw\SDL2_image-2.0.5\x86_64-w64-mingw32\bin
 if  "%PROCESSOR_ARCHITECTURE%"=="x86" (
     echo set the include path 32 bit
 
-set SDL2_Include="../../SDL2/SDL2-2.0.14/include"
+set SDL2_Include="../../SDL2/SDL2-2.0.14/include/"
 set SDL2_Library="../../SDL2/SDL2-2.0.14/lib/x86"
 set SDL2_DLL=..\..\SDL2\SDL2-2.0.14\lib\x86\SDL2.dll
 set SDL2_ttf_Library="../../SDL2/SDL2_ttf-2.0.15/lib/x86"
@@ -113,8 +113,8 @@ if not exist "bin"  mkdir bin
 where cl >nul 2>nul
 IF %ERRORLEVEL% NEQ 0 goto SkipMSVC
 echo Building with MSVC
-if not exist "SDL2\SDL2-2.0.14\include\SDL2" mkdir "SDL2\SDL2-2.0.14\include\SDL2"
-xcopy /Y "SDL2\SDL2-2.0.14\include\*.h"   "SDL2\SDL2-2.0.14\include\SDL2" 
+if not exist "SDL2\SDL2-2.0.14\include\SDL2\" mkdir "SDL2\SDL2-2.0.14\include\SDL2\"
+xcopy /Y "SDL2\SDL2-2.0.14\include\*.h"   "SDL2\SDL2-2.0.14\include\SDL2\" 
 if not exist "bin\MsvcBuild" mkdir bin\MsvcBuild
 pushd bin\MsvcBuild
 xcopy /Y SDL2\SDL2_ttf-2.0.15\include\SDL2\SDL_ttf.h ..\..\SDL2\SDL2-2.0.14\include\SDL2

@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
     SDL_Event event;   //an event which represents our entire program
     while (!quit) //Since quit is false program executes till quit is true->This is the main loop to run program
     {
-        SDL_StartTextInput();
+
+        textinput=false;
         while (SDL_PollEvent(&event)) //this catptures every event hapening during runtime
         {
             if (menu)
@@ -35,6 +36,8 @@ int main(int argc, char *argv[])
             case SDL_QUIT:
                 quit = true;
                 break;
+            case SDL_TEXTINPUT:
+                textinput=true;
             case SDL_MOUSEBUTTONDOWN:
                 if (menu)
                 {
@@ -44,6 +47,7 @@ int main(int argc, char *argv[])
                         {
                             menu = false;
                             dict = true;
+                            Display("",true);
                         }
                         if (mXpos > 518 && mXpos < 784)
                         {
@@ -74,18 +78,16 @@ int main(int argc, char *argv[])
             }
             else if (calci)
             {
-
                 calculator(&event);
             }
-
-            else if (brickG)
-            {
-                BrickBreak(&event);
-            }
+            
         }
         }
-        
-        SDL_StopTextInput();
+        if(!menu)
+        {
+            if(brickG)
+            BrickBreak(&event);
+        }
     }
 
     return 0;
