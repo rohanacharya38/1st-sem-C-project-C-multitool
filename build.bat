@@ -1,4 +1,8 @@
 @echo off
+md bin
+pushd bin
+copy  ..\SDL2\lib\*.dll
+popd
 setlocal
 set source_name="source\mainmenu.c"
 set executable_name=bin\main.exe
