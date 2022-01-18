@@ -5,10 +5,10 @@
 #include <stdio.h>   //Basic input output functions are defined here
 #include <stdbool.h> //This provides basic bool variables
 //Note: Each global variables declaration is to use them in all sub-functions
-#include <SDL2/SDL.h>       //Main library for window and rendering
-#include <string.h>         //string operations
-#include <SDL2/SDL_ttf.h>   //main library for rendering fonts
-#include <SDL2/SDL_image.h> //image library
+#include <SDL.h>       //Main library for window and rendering
+#include <string.h>    //string operations
+#include <SDL_ttf.h>   //main library for rendering fonts
+#include <SDL_image.h> //image library
 
 int main(int argc, char *argv[])
 {
@@ -18,17 +18,16 @@ int main(int argc, char *argv[])
     }
     bool quit = false; //declaring quit to be false so that if we need to quit we can declare it true
     SDL_Event event;   //an event which represents our entire program
-    while (!quit) //Since quit is false program executes till quit is true->This is the main loop to run program
+    while (!quit)      //Since quit is false program executes till quit is true->This is the main loop to run program
     {
 
-        textinput=false;
+        textinput = false;
         while (SDL_PollEvent(&event)) //this catptures every event hapening during runtime
         {
             if (menu)
             {
                 SDL_RenderClear(renderer);
                 SDL_RenderCopy(renderer, menuTexture, NULL, &image);
-                SDL_GetMouseState(&mXpos, &mYpos);
                 SDL_RenderPresent(renderer);
             }
             switch (event.type)
@@ -37,19 +36,21 @@ int main(int argc, char *argv[])
                 quit = true;
                 break;
             case SDL_TEXTINPUT:
-                textinput=true;
+                textinput = true;
             case SDL_MOUSEBUTTONDOWN:
                 if (menu)
                 {
-                    if (mYpos > 301 && mYpos < 562)
+                    SDL_GetMouseState(&mXpos, &mYpos);
+                    printf("X:%d,Y:%d\n", mXpos, mYpos);
+                    if (mYpos > 297 && mYpos < 563)
                     {
-                        if (mXpos > 230 && mXpos < 502)
+                        if (mXpos > 211 && mXpos < 464)
                         {
                             menu = false;
                             dict = true;
-                            Display("",true);
+                            Display("", true);
                         }
-                        if (mXpos > 518 && mXpos < 784)
+                        if (mXpos > 474 && mXpos < 723)
                         {
                             menu = false;
                             brickG = true;
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
                             player2 = MakePlayers();
                             // MakeBricks();
                         }
-                        if (mXpos > 801 && mXpos < 1066)
+                        if (mXpos > 734 && mXpos < 990)
                         {
                             menu = false;
                             calci = true;
@@ -67,26 +68,25 @@ int main(int argc, char *argv[])
                     }
                 }
                 break;
-                default:
-                    break;
+            default:
+                break;
             }
             if (!menu)
-        {
-            if (dict)
             {
-                dictionary(&event);
+                if (dict)
+                {
+                    dictionary(&event);
+                }
+                else if (calci)
+                {
+                    calculator(&event);
+                }
             }
-            else if (calci)
-            {
-                calculator(&event);
-            }
-            
         }
-        }
-        if(!menu)
+        if (!menu)
         {
-            if(brickG)
-            BrickBreak(&event);
+            if (brickG)
+                BrickBreak(&event);
         }
     }
 
@@ -114,10 +114,10 @@ bool Initialize(void)
     {
         return false;
     }
-    menuTexture = IMG_LoadTexture(renderer, "../../media/mainmenu.png");
-    searchTexture = IMG_LoadTexture(renderer, "../../media/searchLayout.png");
-    displayTexture = IMG_LoadTexture(renderer, "../../media/Display.png");
-    calciTexture = IMG_LoadTexture(renderer, "../../media/calci.png");
+    menuTexture = IMG_LoadTexture(renderer, "../media/mainmenu.png");
+    searchTexture = IMG_LoadTexture(renderer, "../media/searchLayout.png");
+    displayTexture = IMG_LoadTexture(renderer, "../media/Display.png");
+    calciTexture = IMG_LoadTexture(renderer, "../media/calci.png");
     createCharacters();
     return true; //If it fails to initialize even 1 memory adresses it simply returns false
 }

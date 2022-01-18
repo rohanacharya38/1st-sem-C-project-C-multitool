@@ -3,10 +3,10 @@
 // const int HEIGHT = 400;
 #include <stdio.h>
 #include <stdbool.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <time.h>
 #include <math.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 int stoi(char str[])
 {
     return (int)str[0];

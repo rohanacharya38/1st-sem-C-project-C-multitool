@@ -1,10 +1,10 @@
 #include <stdio.h>   //Basic input output functions are defined here
 #include <stdbool.h> //This provides basic bool variables
 //Note: Each global variables declaration is to use them in all sub-functions
-#include <SDL2/SDL.h>       //Main library for window and rendering
+#include <SDL.h>       //Main library for window and rendering
 #include <string.h>         //string operations
-#include <SDL2/SDL_ttf.h>   //main library for rendering fonts
-#include <SDL2/SDL_image.h> //image library
+#include <SDL_ttf.h>   //main library for rendering fonts
+#include <SDL_image.h> //image library
 #include <math.h>
 #include "calci.c"
 #define pi 3.141592654

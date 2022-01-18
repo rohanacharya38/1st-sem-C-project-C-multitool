@@ -55,7 +55,7 @@ void writeScore()
     getScore_withname();
     sortArray(highestScore);
     FILE *fp;
-    fp = fopen("../../media/highScore", "wb");
+    fp = fopen("../media/highScore", "wb");
     highestScore[4].score = rohan.score;
     strcpy(highestScore[4].name, rohan.name);
     fwrite(highestScore, sizeof(highestScore), 1, fp);
@@ -68,11 +68,11 @@ void getScore_withname(void)
     data player[5];
     int k = 0;
     FILE *fp;
-    fp = fopen("../../media/highScore", "rb");
+    fp = fopen("../media/highScore", "rb");
     if (fp == NULL)
     {
         printf("file not present in directory->creating it");
-        fp = fopen("highScore", "wb");
+        fp = fopen("../media/highScore", "wb");
         for (int i = 0; i < 5; i++)
         {
             strcpy(player[i].name, " ");
@@ -80,7 +80,7 @@ void getScore_withname(void)
         }
         fwrite(&player, sizeof(player), 1, fp);
         fclose(fp);
-        fp = fopen("../../media/highScore", "rb");
+        fp = fopen("../media/highScore", "rb");
     }
     fread(highestScore, sizeof(highestScore), 1, fp);
     sortArray(highestScore);

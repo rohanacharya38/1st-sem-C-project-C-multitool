@@ -1,10 +1,10 @@
 #include <stdio.h>   //Basic input output functions are defined here
 #include <stdbool.h> //This provides basic bool variables
 //Note: Each global variables declaration is to use them in all sub-functions
-#include <SDL2/SDL.h>       //Main library for window and rendering
+#include <SDL.h>       //Main library for window and rendering
 #include <string.h>         //string operations
-#include <SDL2/SDL_ttf.h>   //main library for rendering fonts
-#include <SDL2/SDL_image.h> //image library
+#include <SDL_ttf.h>   //main library for rendering fonts
+#include <SDL_image.h> //image library
 #define WIDTH  1200
 #define HEIGHT  700//Width and height of screen
 char inpbuffer[255];       //GLobal variable for words inserted during program
@@ -55,7 +55,7 @@ void appendWords(void);
 bool Initialize(void); //It initializes all the required variables and memorry locations like windows and renderer
 
 void createCharacters(void){
-    TTF_Font *gFont = TTF_OpenFont("../../media/Lobster-Regular.ttf", 24); //SDL font pointer
+    TTF_Font *gFont = TTF_OpenFont("../media/Lobster-Regular.ttf", 24); //SDL font pointer
     SDL_Surface *CharacterMap[255];
     for (int i = 0; i < 255; i++)
     {

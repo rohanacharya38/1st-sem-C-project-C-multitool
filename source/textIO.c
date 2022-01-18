@@ -1,10 +1,10 @@
 #include <stdio.h>   //Basic input output functions are defined here
 #include <stdbool.h> //This provides basic bool variables
 //Note: Each global variables declaration is to use them in all sub-functions
-#include <SDL2/SDL.h>       //Main library for window and rendering
+#include <SDL.h>       //Main library for window and rendering
 #include <string.h>         //string operations
-#include <SDL2/SDL_ttf.h>   //main library for rendering fonts
-#include <SDL2/SDL_image.h> //image library
+#include <SDL_ttf.h>   //main library for rendering fonts
+#include <SDL_image.h> //image library
 
 int dictionary(SDL_Event *event)
 {
@@ -203,7 +203,7 @@ void file_read(char word[500])
     }
     strcat(word, ":");
     bool found = false;
-    fp = fopen("..\\..\\media\\test.txt", "r");
+    fp = fopen("..\\media\\test.txt", "r");
     if (fp == NULL)
     {
         printf("error to open file");
@@ -240,7 +240,7 @@ void appendWords(void)
     {
         appendWord[0] = appendWord[0] - 32;
     }
-    fptr = fopen("..\\..\\media\\test.txt", "a");
+    fptr = fopen("..\\media\\test.txt", "a");
     strcat(appendWord, "\n");
     fputs(appendWord, fptr);
     fclose(fptr);
