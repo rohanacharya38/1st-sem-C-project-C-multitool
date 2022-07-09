@@ -1,4 +1,4 @@
-#include "displayB.c"// const int WIDTH = 600;const int WIDTH = 1200;
+#include "displayB.c" // const int WIDTH = 600;const int WIDTH = 1200;
 // const int HEIGHT = 700; //Width and height of screen
 // const int HEIGHT = 400;
 #include <stdio.h>
@@ -25,17 +25,17 @@ int BrickBreak(SDL_Event *event)
     {
         if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_RETURN)
         {
-            if (appendName)
-            {
-                appendName = false;
-                menumode = true;
-                rohan.score = player2.score;
-                player2.score = 0;
-                moveCursorPosition = 0;
-                writeScore();
-                RestartGame();
-            }
-            else if (scoreMode)
+            // if (appendName)
+            // {
+            //     appendName = false;
+            //     menumode = true;
+            //     rohan.score = player2.score;
+            //     player2.score = 0;
+            //     moveCursorPosition = 0;
+            //     writeScore();
+            //     RestartGame();
+            // }
+            if (scoreMode)
             {
                 scoreMode = false;
             }
@@ -44,35 +44,36 @@ int BrickBreak(SDL_Event *event)
                 menumode = false;
             }
         }
-         if (event->type == SDL_TEXTINPUT && appendName &&textinput)
-        {
-            
-            char str[]= {event->text.text[0],'\0'};
-            DisplayB(str, moveCursorPosition, 60);
-            strcat(rohan.name, str);
-            moveCursorPosition+=character[stoi(str)].width;
-            SDL_RenderPresent(renderer);
-        }
-        else if (menumode)
-        {
-            if (event->type == SDL_MOUSEBUTTONDOWN && menumode)
-            {
-                SDL_GetMouseState(&mXpos, &mYpos);
-                if (mXpos > 505 && mXpos < 610 && mYpos > 307 && mYpos < 321) //coordinates of new game
-                {
-                    menumode = false;
-                }
-                else if (mXpos >506  && mXpos < 633 && mYpos > 356 && mYpos < 370) //coordinates of high scores
-                {
-                    highScoreDisplay();
-                }
-            }
-        }
+        //  if (event->type == SDL_TEXTINPUT && appendName &&textinput)
+        // {
+
+        //     char str[]= {event->text.text[0],'\0'};
+        //     DisplayB(str, moveCursorPosition, 60);
+        //     strcat(rohan.name, str);
+        //     moveCursorPosition+=character[stoi(str)].width;
+        //     SDL_RenderPresent(renderer);
+        // }
+        //  if (menumode)
+        // {
+        //     if (event->type == SDL_MOUSEBUTTONDOWN && menumode)
+        //     {
+        //         SDL_GetMouseState(&mXpos, &mYpos);
+        //         if (mXpos > 505 && mXpos < 610 && mYpos > 307 && mYpos < 321) //coordinates of new game
+        //         {
+        //             menumode = false;
+        //         }
+        //         // else if (mXpos >506  && mXpos < 633 && mYpos > 356 && mYpos < 370) //coordinates of high scores
+        //         // {
+        //         //     highScoreDisplay();
+        //         // }
+        //     }
+        // }
     }
     if (!menumode && !scoreMode && !appendName)
     {
         updateB(0.025);
     }
+
     return 0;
 }
 
@@ -80,12 +81,15 @@ void updateB(float elapsed)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer,255,255,255,255);
-    SDL_RenderDrawLine(renderer,300,150,300,550);
-    SDL_RenderDrawLine(renderer,900,150,900,550);
-    SDL_RenderDrawLine(renderer,300,150,900,150);
-    SDL_RenderDrawLine(renderer,300,550,900,550);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawLine(renderer, 300, 150, 300, 550);
+    SDL_RenderDrawLine(renderer, 900, 150, 900, 550);
+    SDL_RenderDrawLine(renderer, 300, 150, 900, 150);
+    SDL_RenderDrawLine(renderer, 300, 550, 900, 550);
     UpdateBall(&ball, elapsed);
+    char score_buffer[100] = "";
+    sprintf(score_buffer, "SCORE::%d", player1.score);
+    DisplayB(score_buffer, -200, -50);
     if (!menumode && !appendName)
     {
         RenderBall(&ball);
@@ -137,26 +141,25 @@ void UpdateBall(Ball *ball, float elapsed)
         ball->x = 600;
         ball->y = 550 - PLAYER_WIDTH - PLAYER_MARGIN;
         player2.xPosition = WIDTH / 2 - PLAYER_HEIGHT / 4 - PLAYER_MARGIN;
-        const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
         ball->xSpeed = SPEED;
         ball->ySpeed = SPEED;
         return;
     }
-    ball->x += ball->xSpeed *elapsed;
-    ball->y += ball->ySpeed *elapsed;
-    if (ball->x < 300+BALL_SIZE)
+    ball->x += ball->xSpeed * elapsed;
+    ball->y += ball->ySpeed * elapsed;
+    if (ball->x < 300 + BALL_SIZE)
     {
         ball->xSpeed = +fabs(ball->xSpeed);
     }
-    if (ball->x > 900-BALL_SIZE/2)
+    if (ball->x > 900 - BALL_SIZE / 2)
     {
         ball->xSpeed = -fabs(ball->xSpeed);
     }
-    if (ball->y < 150+BALL_SIZE)
+    if (ball->y < 150 + BALL_SIZE)
     {
         ball->ySpeed = fabs(ball->ySpeed);
     }
-    if (ball->y > 560-BALL_SIZE/2)
+    if (ball->y > 560 - BALL_SIZE / 2)
     {
         RestartGame();
         // ball->ySpeed=-fabs(ball->ySpeed);
@@ -184,15 +187,15 @@ void UpdatePlayers(float elapsed)
     {
         player2.xPosition += PLAYER_MOVE_SPEED * elapsed;
     }
-    if (player2.xPosition < PLAYER_WIDTH / 2+300)
+    if (player2.xPosition < PLAYER_WIDTH / 2 + 300)
     {
-        player2.xPosition = PLAYER_WIDTH / 2+300;
+        player2.xPosition = PLAYER_WIDTH / 2 + 300;
     }
     if (player2.xPosition > 900 - 80)
     {
-        player2.xPosition = 900- 80;
+        player2.xPosition = 900 - 80;
     }
-    //check if  ball rect overlaps with either player rect
+    // check if  ball rect overlaps with either player rect
     SDL_Rect ballRect = {
         .x = ball.x - ball.size / 2,
         .y = ball.y - ball.size / 2,
@@ -207,7 +210,7 @@ void UpdatePlayers(float elapsed)
     };
     if (SDL_HasIntersection(&ballRect, &player2Rect))
     {
-        ball.ySpeed = -fabs(ball.ySpeed); //ball goes left
+        ball.ySpeed = -fabs(ball.ySpeed); // ball goes left
     }
 }
 void RenderPlayers(void)
@@ -231,7 +234,7 @@ void UpdateScore(int player, int points)
         count[i] = roundno + 1;
     }
     PLAYER_MOVE_SPEED *= 1.3;
-    SPEED *= 1.2;
+    SPEED += 30;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     DisplayB("Congratulations!You Leveled Up", (WIDTH / 2) - 200, HEIGHT / 2 - 30);
@@ -248,7 +251,7 @@ void UpdateBricks(void)
     static float sum = 0;
     bool render = false;
     int k, l, m = 255;
-    //check if  ball rect overlaps with either player rect
+    // check if  ball rect overlaps with either player rect
     SDL_Rect ballRect = {
         .x = ball.x - ball.size / 2,
         .y = ball.y - ball.size / 2,
@@ -260,30 +263,30 @@ void UpdateBricks(void)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 300+ 50 + 100 * i;
-        bricks[i].y = 50+150;
+        bricks[i].x = 300 + 50 + 100 * i;
+        bricks[i].y = 50 + 150;
     }
     for (int i = 5; i < 10; i++)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 300+50 + 100 * (i - 5);
-        bricks[i].y = 150+100;
+        bricks[i].x = 300 + 50 + 100 * (i - 5);
+        bricks[i].y = 150 + 100;
     }
     for (int i = 10; i < 15; i++)
     {
         bricks[i].h = BRICK_HEIGHT;
         bricks[i].w = BRICK_WIDTH;
-        bricks[i].x = 300+50 + 100 * (i - 10);
-        bricks[i].y = 150+150;
+        bricks[i].x = 300 + 50 + 100 * (i - 10);
+        bricks[i].y = 150 + 150;
     }
 
     for (int j = 15; j < 20; j++)
     {
         bricks[j].h = BRICK_HEIGHT;
         bricks[j].w = BRICK_WIDTH;
-        bricks[j].x = 300+50 + 100 * (j - 15);
-        bricks[j].y = 150+200;
+        bricks[j].x = 300 + 50 + 100 * (j - 15);
+        bricks[j].y = 150 + 200;
     }
 
     for (int i = 0; i < 20; i++)
@@ -338,41 +341,34 @@ void UpdateBricks(void)
 
 void RestartGame(void)
 {
-    menumode = true;
-    if (shouldCheck)
-    {
-        writeScore_withname(player2.score);
-    }
+    // menumode = true;
+    // if (shouldCheck)
+    // {
+    //     writeScore_withname(player2.score);
+    // }
+
     char scoreBuf[50];
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    // SDL_RenderClear(renderer);
     // SDL_RenderPresent(renderer);
     // SDL_RenderClear(renderer);
-    if (!appendName)
+ 
+    // DisplayB("New Game", 600 / 2 - 100, (400 / 2) - 50);
+    // DisplayB("High Scores", 600 / 2 - 100, (400 / 2));
+    served = false;
+    player2.score = 0;
+    player1.score = 0;
+    roundno = 1;
+    for (int i = 0; i < 20; i++)
     {
-
-        sprintf(scoreBuf, "Score:%d", player1.score);
-        DisplayB(scoreBuf, 600 / 2 - 100, 50);
-        DisplayB("GAME OVER!", 600 / 2 - 100, 0);
-        DisplayB("New Game", 600 / 2 - 100, (400 / 2) - 50);
-        DisplayB("High Scores", 600 / 2 - 100, (400 / 2));
-        served = false;
-        player2.score = 0;
-        player1.score = 0;
-        roundno = 1;
-        for (int i = 0; i < 20; i++)
-        {
-            count[i] = 1;
-        }
-        PLAYER_MOVE_SPEED = 150.0f;
-        SPEED = 140;
-        SDL_RenderPresent(renderer);
-        shouldCheck = true;
+        count[i] = 1;
     }
-    else if (appendName)
-    {
-        DisplayB("New high score!congratulations", 0, 0);
-        DisplayB("Please Enter your name for records", 0, 30);
-    }
+    PLAYER_MOVE_SPEED = 150.0f;
+    SPEED = 140;
     SDL_RenderPresent(renderer);
+    // else if (appendName)
+    // {
+    //     DisplayB("New high score!congratulations", 0, 0);
+    //     DisplayB("Please Enter your name for records", 0, 30);
+    // }
 }

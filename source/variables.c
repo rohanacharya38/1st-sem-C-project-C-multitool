@@ -125,7 +125,7 @@ const int PLAYER_HEIGHT = 85;
 const int PLAYER_MARGIN = 5;
 const int BRICK_WIDTH = 60;
 const int BRICK_HEIGHT = 10;
-float SPEED = 130;
+float SPEED = 50;
 float PLAYER_MOVE_SPEED = 150.0f;
 bool served;
 bool menumode = false;
