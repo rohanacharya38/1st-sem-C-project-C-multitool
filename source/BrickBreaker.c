@@ -364,7 +364,7 @@ void RestartGame(void)
         count[i] = 1;
     }
     PLAYER_MOVE_SPEED = 150.0f;
-    SPEED = 140;
+    SPEED = 050;
     SDL_RenderPresent(renderer);
     // else if (appendName)
     // {
